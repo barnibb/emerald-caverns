@@ -1,0 +1,12 @@
+# Daten, die server.py zur Laufzeit anlegt (enthalten Spielernamen)
+daten/
+highscores.json
+letzte-spiele.json
+profile.json
+*.tmp
+
+# Sicherungen und lokale Hilfsdateien
+*.vor-*
+sicherung-*/
+.DS_Store
+__pycache__/

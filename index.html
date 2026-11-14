@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07120f">
+  <meta name="description" content="Emerald Caverns – ein kleines Höhlen-Puzzlespiel für den Browser.">
+  <title>Emerald Caverns</title>
+  <link rel="stylesheet" href="style.css?v=20261114-2">
+</head>
+<body>
+  <audio id="prologueMusic" src="audio/prologue-future-ambient-3.mp3?v=20261101-7" preload="auto" loop></audio>
+  <div class="studio-intro" id="studioIntro" aria-label="Barni Productions Intro">
+    <div class="studio-gate"><button class="studio-go" id="studioGo" type="button" disabled>LÄDT…</button></div>
+    <div class="studio-glow" aria-hidden="true"></div>
+    <div class="studio-flight" id="studioFlight">
+      <div class="studio-wave"><div class="studio-title" data-text="Barni Productions · © 2026">Barni Productions · © 2026</div></div>
+    </div>
+    <div class="studio-actions"><button id="introSoundBtn" type="button">▶ TON STARTEN</button><span>ENTER / KLICK: WEITER</span></div>
+  </div>
+  <section class="profile-gate" id="profileGate" hidden aria-labelledby="profileTitle">
+    <div class="profile-card">
+      <span class="eyebrow">SPIELERPROFIL</span>
+      <h2 id="profileTitle">Wer spielt?</h2>
+      <p>Wähle deinen Namen, damit Emerald Caverns am richtigen Spielstand weitergeht.</p>
+      <div class="profile-list" id="profileList"></div>
+      <form class="profile-new" id="profileForm">
+        <label for="profileName">NEUES PROFIL</label>
+        <div><input id="profileName" name="profileName" maxlength="24" autocomplete="nickname" placeholder="Name eingeben" required><button type="submit">STARTEN <span>→</span></button></div>
+      </form>
+      <p class="profile-status" id="profileStatus" role="status"></p>
+      <button class="profile-back" type="button" data-highscore>🏆 HIGHSCORE-LISTE</button>
+    </div>
+  </section>
+  <section class="profile-gate" id="levelGate" hidden aria-labelledby="levelSelectTitle">
+    <div class="profile-card level-card">
+      <span class="eyebrow">LEVELAUSWAHL</span>
+      <h2 id="levelSelectTitle">Weiter hinab</h2>
+      <p id="levelSelectStatus"></p>
+      <button class="level-continue" id="continueProfileBtn" type="button">SPIELSTAND FORTSETZEN <span>→</span></button>
+      <div class="level-grid" id="profileLevelGrid" aria-label="Freigeschaltete Level"></div>
+      <button class="profile-back" id="profileBackBtn" type="button">← ANDERES PROFIL</button>
+    </div>
+  </section>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">◆</span>
+        <div><h1>Emerald Caverns</h1><p>Eine kleine Höhlen-Expedition</p></div>
+      </div>
+      <div class="top-actions"><button class="icon-button" id="saveBtn" type="button">SPEICHERN</button><button class="icon-button" id="profileBtn" type="button">PROFIL: —</button><button class="icon-button" id="editorBtn" type="button">EDITOR</button><button class="icon-button" id="soundBtn" type="button" aria-label="Ton ein- oder ausschalten">TON: AN</button><button class="icon-button" id="highscoreBtn" type="button" data-highscore aria-haspopup="dialog">HIGHSCORE</button><button class="icon-button" id="infoBtn" type="button" aria-haspopup="dialog">INFO</button></div>
+    </header>
+
+    <section class="game-panel" id="gamePanel" aria-label="Spielbereich">
+      <div class="stats">
+        <div class="stat"><span>LEVEL</span><strong id="levelStat">1 / 10</strong></div>
+        <div class="stat"><span>ZIEL</span><strong id="goalStat">0 / 0</strong></div>
+        <div class="stat"><span>DYNAMIT</span><strong id="dynamiteStat">× 0</strong></div>
+        <div class="stat"><span>PUNKTE</span><strong id="scoreStat">0000</strong></div>
+        <div class="stat"><span>LEBEN</span><strong id="livesStat">♥ ♥ ♥</strong></div>
+        <button id="restartBtn" class="restart" type="button">↻ NEUSTART</button>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <div class="level-badge" id="levelBadge">LEVEL 01 · DIE GRÜNE TIEFE</div>
+        <canvas id="game" width="720" height="520" aria-label="Emerald Caverns Spielfeld"></canvas>
+        <canvas id="gameActors" width="720" height="520" aria-hidden="true"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="overlay-card">
+            <span class="eyebrow" id="overlayEyebrow">EXPEDITION 01</span>
+            <h2 id="overlayTitle">Die grüne Tiefe</h2>
+            <p id="overlayText">Sammle alle Smaragde. Sobald das Tor leuchtet, erreichst du den Ausgang.</p>
+            <button id="startBtn" type="button">SPIEL STARTEN <span>→</span></button>
+            <small>PFEILTASTEN / WASD · HALTEN: WEITERLAUFEN · LEERTASTE: DYNAMIT · ENTER: START / WEITER</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-controls" aria-label="Touch-Steuerung">
+        <span></span><button data-dir="up" aria-label="Nach oben">▲</button><span></span>
+        <button data-dir="left" aria-label="Nach links">◀</button><button data-dir="down" aria-label="Nach unten">▼</button><button data-dir="right" aria-label="Nach rechts">▶</button>
+      </div>
+      <button id="dynamiteBtn" class="dynamite-button" type="button">DYNAMIT LEGEN</button><button id="bigDynamiteBtn" class="dynamite-button big" type="button">GROSSES DYNAMIT</button>
+    </section>
+
+    <section class="editor-panel" id="editorPanel" hidden aria-label="Level-Editor">
+      <div class="editor-head"><div><span>LEVEL-EDITOR</span><h2>Eigene Höhle</h2></div><label class="editor-level">LEVEL <select id="editorLevelSelect"></select></label><p id="editorStatus">Werkzeug wählen und Felder anklicken.</p></div>
+      <div class="editor-tools" id="editorTools">
+        <button data-tile="." class="selected">ERDE</button><button data-tile=" ">LEER</button><button data-tile="#">WAND</button><button data-tile="C">SPRENGWAND</button><button data-tile="R">FELS</button><button data-tile="G">SMARAGD</button><button data-tile="M">WÄCHTER ↔</button><button data-tile="U">WÄCHTER ↕</button><button data-tile="D">DYNAMIT</button><button data-tile="X">GROSSES DYNAMIT</button><button data-tile="E">AUSGANG</button><button data-tile="P">SPIELER</button>
+      </div>
+      <canvas id="editorCanvas" width="720" height="520" aria-label="Bearbeitbares Levelraster"></canvas>
+      <div class="editor-actions"><button id="editorLoadBtn">ORIGINAL LADEN</button><button id="editorClearBtn">LEEREN</button><button id="editorSaveBtn">FÜR DIESES LEVEL SPEICHERN</button><button id="editorExportBtn">LEVEL EXPORTIEREN</button><button id="editorTestBtn" class="primary">TESTEN</button><button id="editorCloseBtn">SCHLIESSEN</button></div>
+    </section>
+
+    <footer><span><i class="legend gem"></i>Smaragd</span><span><i class="legend rock"></i>Fels</span><span><i class="legend dynamite"></i>Dynamit</span><span><i class="legend bigdyn"></i>Großes Dynamit</span><span><i class="legend enemy"></i>Höhlenwächter</span><span><i class="legend wall"></i>Feste Wand</span><span><i class="legend exit"></i>Ausgang</span><p>Leertaste: Dynamit legen · X: großes Dynamit (doppelte Reichweite)</p><a class="music-credit" href="https://opengameart.org/content/crystal-cave-song18" target="_blank" rel="noopener">Levelmusik: im Spiel erzeugt · Reserve: Crystal Cave · CynicMusic · CC0</a><a class="music-credit" href="https://opengameart.org/content/royalty-free-game-music-loops" target="_blank" rel="noopener">Prolog: FutureAmbient_3 · Pudgyplatypus · CC0</a></footer>
+  </main>
+
+  <dialog id="infoDialog" class="info-dialog" aria-labelledby="infoTitle">
+    <div class="info-head"><div><p class="info-eyebrow">Emerald Caverns</p><h2 id="infoTitle">Versionsstand</h2></div><button class="icon-button" id="infoClose" type="button" aria-label="Schließen">✕</button></div>
+    <p class="info-version">Version <strong>2026.11.14-2</strong> · Stand 14. November 2026</p>
+    <p class="info-credit">Spielidee &amp; Leveldesign: <strong>Björn Buchweitz</strong></p>
+    <h3>Letzte Änderungen</h3>
+    <div class="info-log">
+      <section><h4>14. November 2026</h4><ul>
+        <li>Neuer, selbst erzeugter Explosionsklang (frei nutzbar, CC0) – der Knall kommt jetzt genau im Moment der Explosion, auch beim großen Dynamit</li>
+        <li>Abspann nach dem 100. Level und Hinweis auf den Spielautor im Info-Fenster</li>
+      </ul></section>
+      <section><h4>13. November 2026</h4><ul>
+        <li>Level 28 „Kupferschacht 8“ mit neu gestalteter Karte</li>
+        <li>Ab Level 30 liegen zunehmend mehr freie Steine zum Schieben in den Höhlen (von 2 bis etwa 10) – geprüft, dass jedes Level lösbar bleibt</li>
+        <li>Neuer Ausgang: ein Smaragd in steinerner Fassung – sobald alle Smaragde gesammelt sind, leuchtet er grün, mit Lichtstrahlen, Funken und Klang</li>
+      </ul></section>
+      <section><h4>10. November 2026</h4><ul>
+        <li>Spielerprofile werden jetzt auf dem Pi gespeichert – auf jedem Gerät im Heimnetz geht es mit demselben Spielstand weiter</li>
+      </ul></section>
+      <section><h4>7. November 2026</h4><ul>
+        <li>Highscore-Liste erscheint nach dem letzten Leben jetzt auch beim Wiederholen eines Levels; neue Versionen werden sofort geladen</li>
+        <li>Highscore-Fenster zeigt unter der Bestenliste auch die letzten Spiele aller Spieler</li>
+        <li>Nach dem letzten Leben erscheint die Highscore-Liste – Klick oder Enter startet neu</li>
+        <li>Neue gemeinsame Highscore-Liste auf dem Pi: alle Spieler mit Punkten und erreichtem Level – Knopf HIGHSCORE oben oder im Profilfenster</li>
+        <li>Neues Intro: Der Schriftzug „Barni Productions“ erscheint nach GO jetzt zuverlässig und sendet Lichtstrahlen in den Raum, die im Takt pulsieren</li>
+        <li>Level 29 „Kupferschacht 9“, Level 34 „Farngewölbe 4“ und Level 35 „Farngewölbe 5“ mit neu gestalteten Karten</li>
+        <li>Musik noch abwechslungsreicher: ab Level 11 hat jedes Level einen eigenen Track mit eigener Melodie und Akkordfolge; zwei neue Stile (Synthwave, Chiptune) und vier Klangfarben für die Melodie</li>
+        <li>Neues Extra „Großes Dynamit“: doppelte Sprengreichweite (5×5 Felder), legen mit Taste X; ab Level 12 in jedem zweiten Level zu finden und im Editor platzierbar</li>
+        <li>Smaragde fallen jetzt wie Felsen, wenn unter ihnen keine Erde ist, und klingen dabei kristallen – fällt einer auf den Spieler, wird er eingesammelt</li>
+        <li>Info-Fenster mit Versionsstand und Änderungen – das Spiel pausiert, solange es offen ist</li>
+      </ul></section>
+      <section><h4>6. November 2026</h4><ul>
+        <li>Neue Musik: eigener Track für jedes Level mit Intro, Strophe, Refrain und Break – vier Stile (House, Breakbeat, Drive, Electro)</li>
+        <li>Effekte: Funken beim Einsammeln, Explosionen mit Splittern, Rauch und Bildwackeln, Staub beim Aufprall von Felsen</li>
+        <li>Warnung, wenn ein Fels von oben auf den Spieler zufällt</li>
+        <li>Punkte-Anzeige (+100, +50, +250) direkt im Spielfeld</li>
+        <li>Level 8 „Die schwarze Ader“ und Level 9 „Kammer der Echos“ neu gestaltet</li>
+      </ul></section>
+    </div>
+  </dialog>
+  <dialog id="highscoreDialog" class="info-dialog highscore-dialog" aria-labelledby="highscoreTitle">
+    <div class="info-head"><div><p class="info-eyebrow">Emerald Caverns</p><h2 id="highscoreTitle">Highscore</h2></div><button class="icon-button" id="highscoreClose" type="button" aria-label="Schließen">✕</button></div>
+    <p class="info-version" id="highscoreStatus" role="status"></p>
+    <table class="highscore-table"><thead><tr><th>#</th><th>Name</th><th>Punkte</th><th>Erreicht</th><th>Erledigt</th><th>Zuletzt</th></tr></thead><tbody id="highscoreBody"></tbody></table>
+    <div class="recent-games" id="recentGames" hidden><h3>Letzte Spiele</h3><table class="recent-table"><thead><tr><th>Wann</th><th>Name</th><th>Punkte</th><th>Level</th><th>Ende</th></tr></thead><tbody id="recentBody"></tbody></table></div>
+    <p class="highscore-continue">KLICK ODER ENTER: NEU STARTEN</p>
+  </dialog>
+  <div class="credits" id="credits" hidden aria-label="Abspann"><div class="credits-sky" aria-hidden="true"></div><div class="credits-roll" id="creditsRoll"></div><p class="credits-hint" id="creditsHint"></p></div>
+  <script src="credits.js?v=20261114-2"></script>
+  <script src="highscore.js?v=20261114-2"></script>
+  <script src="musik.js?v=20261114-2"></script>
+  <script src="intro.js?v=20261114-2"></script>
+  <script src="game.js?v=20261114-2"></script>
+</body>
+</html>
