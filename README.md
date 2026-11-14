@@ -4,6 +4,7 @@ Ein kleines Höhlen-Puzzlespiel für den Browser – im Geist der klassischen
 Heimcomputer-Spiele der 80er (inspiriert von Boulder Dash). Grabe dich durch 100 Höhlen,
 sammle alle Smaragde, weiche fallenden Felsen und Wächtern aus und erreiche den
 leuchtenden Smaragd-Ausgang.
+<img width="970" height="750" alt="image" src="https://github.com/user-attachments/assets/1def5ff8-9641-44f4-82c7-361724185ca8" />
 
 **Ein Spiel von Björn Buchweitz** · Barni Productions · © 2026
 
