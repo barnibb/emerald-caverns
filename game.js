@@ -268,7 +268,7 @@
   function loadDynamiteSound(){
     if(dynamiteBuffer)return Promise.resolve(dynamiteBuffer);
     if(dynamiteBufferPromise)return dynamiteBufferPromise;
-    dynamiteBufferPromise=fetch('audio/dynamite-explosion.wav?v=20261114-2')
+    dynamiteBufferPromise=fetch(window.EMERALD_DYNAMITE_WAV||'audio/dynamite-explosion.wav?v=20261114-2')
       .then(response=>{if(!response.ok)throw new Error(`Explosionsklang konnte nicht geladen werden (${response.status})`);return response.arrayBuffer()})
       .then(data=>new Promise((resolve,reject)=>audio.decodeAudioData(data,resolve,reject)))
       .then(buffer=>(dynamiteBuffer=buffer))

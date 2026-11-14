@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#07120f">
   <meta name="description" content="Emerald Caverns – ein kleines Höhlen-Puzzlespiel für den Browser.">
   <title>Emerald Caverns</title>
-  <link rel="stylesheet" href="style.css?v=20261114-2">
+  <link rel="stylesheet" href="style.css?v=20261114-3">
 </head>
 <body>
   <audio id="prologueMusic" src="audio/prologue-future-ambient-3.mp3?v=20261101-7" preload="auto" loop></audio>
@@ -97,11 +97,12 @@
 
   <dialog id="infoDialog" class="info-dialog" aria-labelledby="infoTitle">
     <div class="info-head"><div><p class="info-eyebrow">Emerald Caverns</p><h2 id="infoTitle">Versionsstand</h2></div><button class="icon-button" id="infoClose" type="button" aria-label="Schließen">✕</button></div>
-    <p class="info-version">Version <strong>2026.11.14-2</strong> · Stand 14. November 2026</p>
+    <p class="info-version">Version <strong>2026.11.14-3</strong> · Stand 14. November 2026</p>
     <p class="info-credit">Spielidee &amp; Leveldesign: <strong>Björn Buchweitz</strong></p>
     <h3>Letzte Änderungen</h3>
     <div class="info-log">
       <section><h4>14. November 2026</h4><ul>
+        <li>Explosionsklang ist jetzt eingebettet und funktioniert auch, wenn index.html direkt geöffnet wird</li>
         <li>Neuer, selbst erzeugter Explosionsklang (frei nutzbar, CC0) – der Knall kommt jetzt genau im Moment der Explosion, auch beim großen Dynamit</li>
         <li>Abspann nach dem 100. Level und Hinweis auf den Spielautor im Info-Fenster</li>
       </ul></section>
@@ -142,10 +143,11 @@
     <p class="highscore-continue">KLICK ODER ENTER: NEU STARTEN</p>
   </dialog>
   <div class="credits" id="credits" hidden aria-label="Abspann"><div class="credits-sky" aria-hidden="true"></div><div class="credits-roll" id="creditsRoll"></div><p class="credits-hint" id="creditsHint"></p></div>
-  <script src="credits.js?v=20261114-2"></script>
-  <script src="highscore.js?v=20261114-2"></script>
-  <script src="musik.js?v=20261114-2"></script>
-  <script src="intro.js?v=20261114-2"></script>
-  <script src="game.js?v=20261114-2"></script>
+  <script src="credits.js?v=20261114-3"></script>
+  <script src="audio/dynamit-klang.js?v=20261114-3"></script>
+  <script src="highscore.js?v=20261114-3"></script>
+  <script src="musik.js?v=20261114-3"></script>
+  <script src="intro.js?v=20261114-3"></script>
+  <script src="game.js?v=20261114-3"></script>
 </body>
 </html>

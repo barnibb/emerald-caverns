@@ -60,6 +60,7 @@ Auf Touch-Geräten erscheinen Steuerknöpfe.
 | `credits.js` | Abspann |
 | `server.py` | optionaler Webserver mit Speicher für Highscores und Profile |
 | `audio/` | Klänge und Musik mit Quellenangaben |
+| `audio/dynamit-klang.js` | Explosionsklang eingebettet (für direktes Öffnen von `index.html`) |
 | `tools/make_explosion.py` | erzeugt den Explosionsklang |
 
 ## Lizenzen
